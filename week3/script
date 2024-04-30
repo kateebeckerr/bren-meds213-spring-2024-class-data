@@ -1,0 +1,199 @@
+.open database.db
+
+
+-- monday transcript
+
+SELECT * FROM Species;
+.tables
+
+-- SQ: is case sensitive 
+select * from species;
+
+-- limiting rows
+SELECT * FROM Species LIMIT 5;
+SELECT * FROM Species LIMIT 5 OFFSET 5;
+
+-- how mnany rows
+SELECT COUNT(*) FROM Species; 
+
+-- if put column name in COUNT() , how many non- NULL values 
+SELECT COUNT(Scientific_name) FROM Species;
+
+-- how many distinct values occur?
+SELECT DISTINT Spcies FROM Bird_nests;
+
+-- can select which columns to return by naming them 
+SELECT *FROM Species;
+SELECT Code, Common_name FROM Species;
+SELECT Species FROM Bird_nnests;
+SELECT DISTINCT Species FROM Bird_nests; 
+
+
+-- get distinct combinations 
+SELECT DISTINCT Species, Observer FROM Bird_nests;
+-- ordering of results 
+-- ordering of resutls
+SELECT DISTINCT Species from Bird_nests ORDER BY Species; 
+SELECT * FROM Site;
+
+-- what distinct locations occur in the site tables? prder them by location 
+-- Also limit to 3 results
+-- did it order reuslts 1st or give first 3 or take frst 3 and order them? (ordered them first and then gave top3) 
+
+
+SELECT DISTINCT Location FROM Site ORDER BY Location; 
+
+
+#thursday
+
+.maxrow 6
+SELECT Location FROM Site;
+SELECT * From Site WHERE area < 200; 
+SELECT * FROM WHERE Area < 200 AND Location LIKE '%USA';  #like is the pattern matching 
+SELECT * FROM SITE WHERE Area < 200 AND LocationILIKE '%usa';
+
+-- expressions
+SELECT Site_name, Area FROM Site;
+SELECT Site_name, Area * 2.47 FROM Site;
+SELECT Site_name, Area * 2.47 AS Area_acres FROM Site;
+SELECT Site_name || 'foo' FROM Site;
+-- aggregation functions 
+SELECT COUNT(*) FROM Site; 
+SELECT COUNT(*) AS num_rows FROM Site;
+/help mode
+.mode box
+SELECT Site_name, Area * 2.47 AS Area_acres FROM Site;
+.mode duckbox 
+SELECT COUNT(Scientific_name)FROM Species;
+SELECT DISTINCT Relevance from Species
+SELECT COUNT(DISTINCT Relevance) FROM Species;
+
+-- MIN, MAX, AVG
+SELECT AVG(Area) FROM Site;
+-- GROUPING
+SELECT * FROM Site;
+SELECT Location, MAX(Area)
+    FROM Site
+    GROUP BY Location;
+SELECT Location, COUNT(*)
+SELECT * FROM Species;
+SELECT Relevance, COUNT(Scientific_name)
+    FROM Species
+    GROUP BY Relevance
+-- adding WHERE clause
+SELECT Location, MAX(Area)
+    FROM Site
+    GROUP BY Location;
+
+SELECT Locaton, MAX(Area)
+    GROUP BY Location;
+SELECT Location, MAX(Area)
+    FROM Site
+    Where lOCATION like '%Canada'
+    GROUP BY LOCATION;     --like makes it case sensitive and unlike makes it not case sensitive 
+
+SELECT Location, MAX(Area) AS Max_area
+    FROM Site 
+    WHERE Location LIKE '%Canada'
+    GROUP BY Location 
+    HAVING Max_area > 200;  -- taking whole row, which rows, group, collapse into max
+
+    -- relational algebra breaks through
+SELECT COUNT(*) FROM Site;
+SELECT COUNT(*) from ( SELECT COUNT(*) FROM Site); 
+SELECT * FROM BirD_nests LIMIT 3;
+SELECT COUNT(*) FROM Species;
+SELECT * FROM Species   
+    WHERE Code NOT IN (Select DISTINCT Species FROM Bird_nests) ;
+
+
+
+
+
+-- save queries 
+CREATE TEMP TABLE t AS
+    SELECT * FROM Species
+    WHERE Code NOT IN ( SELECT DISTINCT Species FROM Bird_nests );
+SELECT * FROM t; \
+
+-- or permanently:
+CREATE TABLE t_perm AS
+    SELECT * FROM Species
+    WHERE Code NOT IN ( SELECT DISTINCT Species from Bird_nests) ;
+SELECT * FROM t;
+SELECT * FROM t_perml
+DROP TABLE T_perm;
+
+-- NULL processing
+SELECT COUNT(*) FROM Bird_nests
+    WHERE floatAge <= 5;
+SELECT COUNT(*) FROM Bird_nests;
+    WHERE floatAge < 5;
+SELECT COUNT(*) FROM Bird_nests;
+SELECT COUNT(*) FROM Bird_nests WHERE floatAge = NULL;
+SELECT COUNT(*) FROM Bird_nests WHERE floatAge is NULL;
+
+-- joins 
+SELECT * FROM Camp_assignments;
+SELECT * FROM Personnel;
+SELECT * FROM Camp_assignments JOIN Personnel   
+    ON Observer = Abbreviations
+    LIMIT 3;
+
+SELECT Name, Year, Site, Start, End
+    FROM Camp_assignments JOIN Personnel
+    ON Observer = Abbreviation
+    LIMIT 3;
+
+-- joins 
+SELECT * FROM Camp_assignments;
+SELECT * FROM Personnel;
+SELECT * FROM Camp_assignments JOIN Personnel   
+    ON Observer = Abbreviations
+.mode cv
+.mode duckboz
+SELECT * FROM Camp_assignments JOIN Personnel
+    ON Camp_assignments.Observer = Personnel_abbreviations
+=
+-- joins 
+SELECT * FROM Camp_assignments;
+SELECT * FROM Personnel;
+SELECT * FROM Camp_assignments JOIN Personnel   
+    ON Observer = Abbreviations
+.mode cv
+.mode duckboz
+SELECT * FROM Camp_assignments JOIN Personnel
+    ON Camp_assignments.Observer = Personnel_abbreviations
+SELECT * FROM Camp_assignments AS ca JOIN Personnel p
+        ON ca.Observer = p.Abbreviation;
+
+
+
+-- multiway join
+SELECT * FROM Camp_assignments ca JOIN Personnel pattern 
+    ON ca.Observer = p.Abbreviation
+    JOIN Site s
+    ON ca.Site = s.Code
+    LIMIT 3;
+    WHERE ca.Observer = 'lmmckinnon'
+    LIMIT 3;
+
+    -- order by; at end 
+    SELECT * FROM Camp_assignments ca JOIN(
+        SELECT * FROM Personnel ORDER BY Abbreviation
+    ) p 
+    ON ca.Observer = 'lmckinnon'
+    LIMIT 3; 
+    -- databases dont have an order instricically, database is free to query mine 
+
+-- more on grouping  
+SELECT Nest_ID, COUNT(*) FROM Bird_eggs GROUP BY Nest_ID;
+
+
+
+-- Question1: 
+-- temp table with all real numbers select for age 
+-- CREATE TABLE, INSERT INTO table - 1 VALUES (value 1), (value 2), (value 3);, creating tables with specifications, insert this intoo....
+-- do calc then specify 
+-- insert numbers insert.to into table and values 
+
