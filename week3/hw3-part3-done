@@ -1,0 +1,28 @@
+-- Question 3 
+SHOW TABLES; 
+
+--List the scientific names of bird species in descending order of their maximum average egg volumes. 
+--Compute the average volume of the eggs in each nest
+CREATE TEMP TABLE Averages AS
+    SELECT Nest_id, AVG((3.14 / 6) * (Width * Width) * Length) AS Avg_Volume
+    FROM Bird_eggs
+    GROUP BY Nest_ID;       
+--Then for the nests of each species compute the maximum of those average volumes
+SELECT Species, MAX(Avg_Volume) AS Max_Avg_Volume
+    FROM Bird_nests JOIN Averages USING (Nest_ID)
+    GROUP BY Species
+    ORDER BY Max_Avg_Volume DESC; --List by species in descending order of maximum volume. 
+
+--Now get the scientific names--
+CREATE TEMPORARY TABLE MaxAvgVolumes AS
+SELECT Species, MAX(Avg_Volume) AS Max_Avg_Volume
+FROM Bird_nests 
+JOIN Averages USING (Nest_ID)
+GROUP BY Species
+ORDER BY Max_Avg_Volume DESC;
+
+SELECT Max_Avg_Volume, Scientific_Name
+FROM MaxAvgVolumes LEFT JOIN Species ON MaxAvgVolumes.Species = Species.Code
+GROUP BY Max_Avg_Volume, Scientific_Name
+ORDER BY Max_Avg_Volume DESC
+LIMIT 7; 

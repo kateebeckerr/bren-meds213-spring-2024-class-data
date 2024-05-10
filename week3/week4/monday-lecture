@@ -1,0 +1,55 @@
+-- inserting data
+SELECT * FROM Species;
+
+.maxrows 8 
+INSERT INTO Species VALUES ('abcd', 'thing', 'scientific name', NULL) ;
+SELECT * FROM Species;
+
+-- can explicity label columms , cant use abcd because its a primary key 
+INSERT INTO Species(Common_name, Scientific_Name, Code, Relevance)
+    VALUES("'efgh", 'thing 2', 'scientific name', 'efgh', NULL);
+-- take advantage of default values 
+INSERT INTO Species (Common_name, Code) VALUES ('thing 3', 'ijkl')
+SELECT * FROM Species;
+.nullvalue -NULL-
+
+-- update and delete, IDENTIFYING SOME ROWS FORM TABLE AND SAYING WHAT YOU WANT TO DO 
+UPDATE Species SET Relevance = 'not sure yet' WHERE Relevance IS  NULL;
+DELETE FROM Species WHERE Relevance = 'not sure yet';
+SELECT * FROM Species;
+-- safe delete practice #1
+DELETE FROM Species WHERE Relevance = 'Study species'; --DELETE where theres a where cause will only delete that 
+
+-- after confirming then edit statement
+DEDLETE FROM Species WHERE Relevance = 'Study species';
+-- incomplete statement
+-- leave off "DELETE", then add it after visual confirmation 
+FROM Species WHERE...
+
+-- Import the data frmp tje csv file 
+COPY Snow_cover FROM 'snow_cover_fixedman_JB.csv' (header = TRUE); -- csv
+
+UPDATE Snow_cover SET Snow_cover 
+
+DELETE FROM Species where Relevance = 'NOT SO SURE';
+
+--CHECL 
+SELECT * FROM Species WHERE Relevance IS NULL;
+
+COPY Species TO 'species_fixed.csv' (HEADER, DELIMETER ',');
+
+CREATE TABLE Snow_cover(
+    Plot VARCHAR, -- some null int he data
+    Location VARCHAR NOT NULL,
+    Snow_cover INTEGER CHECK (Snow_cover >- 1 AND Snow_cover < 101),
+    Observer VARCHAR 
+
+CREATE TABLE Snow_cover2(
+    Plot VARCHAR, -- some null int he data
+    Location VARCHAR NOT NULL,
+    Snow_cover INTEGER CHECK (Snow_cover >- 1 AND Snow_cover < 101),
+    Observer VARCHAR 
+);
+
+COPY 'Snow_cover2' FROM 'snow_cover_fixedman_JB.csv' (HEADER TRUE);
+

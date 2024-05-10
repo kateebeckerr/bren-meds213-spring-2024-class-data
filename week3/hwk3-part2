@@ -1,0 +1,114 @@
+-- Quesiton 2 
+.open database.db
+.tables
+
+
+-- Part 1
+SELECT Site_name, MAX(Area)
+FROM SiteGROUP BY Site_name;
+-- the code above is conceptually flawed because
+    -- the site table has multiple rows with the same Site_name so the query will not conduct accurate averaging without proper grouping
+    -- there are multiple rows with the maximum Area it may not be associated with the correct site_name
+
+SELECT * FROM Site;
+SELECT Site_name, AVG(Area) FROM Site
+
+SELECT Site_name, AVG(Area) FROM Site;
+SELECT Site_name, COUNT(*) FROM Site;
+SELECT Site_name, SUM(Area) FROM Site;
+
+-- Part 2
+SELECT * FROM Site;
+SELECT Site_name, Area
+FROM Site
+ORDER BY Area DESC
+LIMIT 1;
+
+-- PART 3 Query
+SELECT Site_name, Area FROM Site WHERE Area = (SELECT MAX(Area) FROM Site);
+
+
+
+
+
+-- Quesiton 2 
+
+.open database.db
+.tables
+-- Part 1
+SELECT * FROM Site;
+SELECT Site_name, AVG(Area) FROM Site
+
+SELECT Site_name, AVG(Area) FROM Site;
+SELECT Site_name, COUNT(*) FROM Site;
+SELECT Site_name, SUM(Area) FROM Site;
+
+-- Part 2
+-- order in descening order
+
+SELECT * FROM Site;
+SELECT Site_name, Area
+FROM Site
+ORDER BY Area DESC
+LIMIT 1;
+
+-- PART 3 Query
+SELECT Site_name, Area FROM Site WHERE Area = (SELECT MAX(Area) FROM Site);
+
+-- Question 3 
+SHOW TABLES; 
+SELECT * FROM Bird_eggs;
+
+-- computing average problem  
+CREATE TEMP TABLE Averages AS 
+    SELECT Nest_ID, AVG((3.14/6) * Length * Width) AS Avg_volume
+        FROM Bird_eggs
+        GROUP BY Nest_ID;
+
+-- examine table
+SELECT * FROM Averages;
+
+-- join table with bird_nests 
+CREATE TEMP TABLE SpeciesChar AS
+    SELECT Species, MAX(Avg_volume) AS Max_Avg_volume
+        FROM Bird_nests JOIN Averages USING (Nest_ID)
+        GROUP BY species;
+
+
+ALTER TABLE SpeciesChar
+RENAME COLUMN Species TO CODE;
+
+ALTER TABLE SpeciesChar
+RENAME COLUMN CODE TO Code;
+
+SELECT * FROM SpeciesChar;
+
+CREATE TEMP TABLE Final AS 
+    SELECT *
+    FROM Species
+    INNER JOIN SpeciesChar
+    ON SpeciesChar.Code = Species.Code;
+
+SELECT * FROM Final; 
+
+ALTER TABLE Final
+DROP COLUMN Common_name;
+
+ALTER TABLE Final
+DROP COLUMN Relevance;
+
+SELECT * FROM Final; 
+
+ALTER TABLE Final
+DROP COLUMN Code;
+
+ALTER TABLE Final
+DROP COLUMN Code_1;
+
+ALTER TABLE Final
+DROP COLUMN Code;
+
+SELECT * FROM Final
+ORDER BY Max_Avg_volume DESC;
+
+

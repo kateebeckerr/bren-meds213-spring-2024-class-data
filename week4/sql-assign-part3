@@ -1,0 +1,16 @@
+--3 Who's the Culprit? 
+
+SELECT Observer, COUNT(*) AS Clutch_max
+FROM Bird_nests
+WHERE ageMethod = 'float'
+GROUP BY Observer
+HAVING COUNT(*) > 1;
+
+
+SELECT Observer, COUNT(*) AS Clutch_max
+FROM Bird_nests
+WHERE ageMethod = 'float'
+  AND Observer = 'edastrous' 
+GROUP BY Observer
+HAVING COUNT(*) > 1;
+

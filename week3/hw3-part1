@@ -1,0 +1,57 @@
+-- Question 1 
+
+-- Part 1
+-- Start the DB at the terminal: duckdb
+
+CREATE TEMP TABLE katestable as SELECT 29 As Temperature;
+SHOW TABLES; 
+FROM katestable SELECT *;
+INSERT INTO katestable (Temperature) VALUES(28);
+INSERT INTO katestable (Temperature) VALUES(32);
+INSERT INTO katestable (Temperature) VALUES(32);
+INSERT INTO katestable (Temperature) VALUES(31);
+INSERT INTO katestable (Temperature) VALUES(NULL);
+INSERT INTO katestable (Temperature) VALUES(24);
+INSERT INTO katestable (Temperature) VALUES(31);
+INSERT INTO katestable (Temperature) VALUES(29);
+INSERT INTO katestable (Temperature) VALUES(30);
+
+-- VS will only allow you to do a separate INSERT for each row, you cannot insert more than one at once 
+
+SELECT AVG(Temperature)FROM katestable;
+
+FROM katestable SELECT *;
+-- avg is 28.735, when calculating the average of a column that contains NULL values, the AVG() function exludes the NULL and only returns the average of the non-null values 
+
+-- factoring them in as a zero, average goes down to 28.46
+INSERT INTO katestable (Temperature) VALUES(28);
+INSERT INTO katestable (Temperature) VALUES(32);
+INSERT INTO katestable (Temperature) VALUES(32);
+INSERT INTO katestable (Temperature) VALUES(31);
+INSERT INTO katestable (Temperature) VALUES(0);
+INSERT INTO katestable (Temperature) VALUES(24);
+INSERT INTO katestable (Temperature) VALUES(31);
+INSERT INTO katestable (Temperature) VALUES(29);
+INSERT INTO katestable (Temperature) VALUES(30);
+SELECT AVG(Temperature)FROM katestable;
+
+-- ignoring them entirely (deleting all NULL) avg is 28.735
+INSERT INTO katestable (Temperature) VALUES(28);
+INSERT INTO katestable (Temperature) VALUES(32);
+INSERT INTO katestable (Temperature) VALUES(32);
+INSERT INTO katestable (Temperature) VALUES(31);
+INSERT INTO katestable (Temperature) VALUES(24);
+INSERT INTO katestable (Temperature) VALUES(31);
+INSERT INTO katestable (Temperature) VALUES(29);
+INSERT INTO katestable (Temperature) VALUES(30);
+SELECT AVG(Temperature)FROM katestable;
+
+-- Part 2
+
+-- The query belowed calculated the average by dividing the total sum of all values by the total count of rows including those with NULL values
+SELECT SUM(Temperature)/COUNT(*) FROM katestable;
+
+-- the query below works the best because it calculates the averge using only the non-NULL values
+SELECT SUM(Temperature)/COUNT(Temperature) FROM katestable;
+
+
